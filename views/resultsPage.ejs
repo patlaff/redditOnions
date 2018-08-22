@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h3>&nbsp;</h3>
+	<h3 style="text-align: center;"><strong><%= result %></strong></h3>
+	<p>&nbsp;</p>
+	<p style = "text-align: center;"><%= headline %></p>
+	<table cellspacing="90px" align="center">
+		<tbody>
+			<tr>
+				<td><a href= "<%= articleLink %>" target=”_blank”>View Article</a></td>
+				<td><a href= "<%= redditLink %>" target=”_blank”>View Reddit Comments</a></td>
+			</tr>
+		</tbody>
+	</table>
+	<form method="post" action="/refresh">
+		<p style="text-align: center">
+			<button type="submit" style="padding: 15px 30px" name="AnothaOne" value="AnothaOne">Anotha One</button>
+		</p>
+	</form>
+	<p>&nbsp;</p>
+	<p style = "text-align: center;">Score: <%= userScore %></p>
+</body>
+</html>

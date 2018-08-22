@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h3>&nbsp;</h3>
+	<h3 style="text-align: center;"><strong>Is this a real headline or a fake one?</strong></h3>
+	<p>&nbsp;</p>
+	<% if(headline !== null){ %>
+		<p style = "text-align: center;"><%= headline %></p>
+	<% } %>
+	<% if(error !== null){ %>
+		<p style = "text-align: center;"><%= error %></p>
+	<% } %>
+	<table cellspacing="90px" align="center">
+    	<tbody>
+        	<tr>
+				<form method="post" action="/result">
+            		<td><button type="submit" style="padding: 15px 30px" name="guess" value=0>REAL</button></td>
+					<td><button type="submit" style="padding: 15px 30px" name="guess" value=1>FAKE</button></td>
+				</form>
+			</tr>
+      	</tbody>
+	</table>
+	<p>&nbsp;</p>
+	<p style = "text-align: center;">Score: <%= userScore %></p>
+</body>
+</html>
