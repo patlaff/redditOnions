@@ -77,7 +77,7 @@ let headlineData = ''
 let articleLink = ''
 let redditLink = ''
 
-//CREATE SERVER//
+//Make Reddit API call, return headline, and prompt user for a guess
 app.get('/', function (req, response) {
     getNewHeadline()
     console.log(subreddit[realOrFake])
@@ -96,6 +96,7 @@ app.get('/', function (req, response) {
     })
 });
 
+//display result of the guess made by user
 app.post('/result', function(req, res) {
     console.log(req.body)
     console.log(req.body.guess)
@@ -125,6 +126,7 @@ app.post('/result', function(req, res) {
         userScore: userScore});
   });
 
+//return user to guesspage with new headline after results are shown
 app.post('/refresh', function(req, res) {
     if(req.body.AnothaOne == 'AnothaOne') {
         console.log(req.body.AnothaOne)
@@ -132,8 +134,25 @@ app.post('/refresh', function(req, res) {
     }
 })
 
+//listen on specific port
 app.listen(port, function () {
   console.log('App listening on port ' + port +'!');
+});
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 module.exports = app;
