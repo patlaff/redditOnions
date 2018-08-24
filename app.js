@@ -38,4 +38,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+/*listen on specific port
+app.listen(port, function () {
+  console.log('App listening on port ' + port +'!');
+});*/
+
 module.exports = app;

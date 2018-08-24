@@ -1,15 +1,16 @@
 
 //REQUIRE STATMENTS//
-const express           = require('express');
-const request           = require('request');
-const bodyParser        = require('body-parser');
-var   router            = express.Router();
+var express           = require('express');
+var request           = require('request');
+var bodyParser        = require('body-parser');
+var router            = express.Router();
 
-//SET TEMPLATE ENGINE//
+router.use(bodyParser.urlencoded({ extended: true }));
+
+/*SET TEMPLATE ENGINE//
 const app = express();
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');*/
 
 //GLOBAL FUNCTIONS//
 function getRandomInt(max) {
@@ -22,7 +23,7 @@ function getNewHeadline() {
 //function getUserScore(guess) {}
 
 //GLOBAL VARIABLES//
-const port = 1337;
+
 const subreddit = {0: 'nottheonion', 1: 'theonion'}
 let postIndex = getRandomInt(50);   //Used to pick a post from the Subreddit defined above
 let realOrFake = getRandomInt(2);   //0 = Real ; 1 = Fake
@@ -36,7 +37,7 @@ let articleLink = ''
 let redditLink = ''
 
 //Make Reddit API call, return headline, and prompt user for a guess
-app.get('/', function (req, response) {
+router.get('/', function (req, response) {
     getNewHeadline()
     console.log(subreddit[realOrFake])
     url = `https://www.reddit.com/r/${subreddit[realOrFake]}/top/.json?t=week&limit=100`
@@ -55,7 +56,7 @@ app.get('/', function (req, response) {
 });
 
 //display result of the guess made by user
-app.post('/result', function(req, res) {
+router.post('/result', function(req, res) {
     console.log(req.body)
     console.log(req.body.guess)
     console.log(realOrFake)
@@ -85,16 +86,11 @@ app.post('/result', function(req, res) {
   });
 
 //return user to guesspage with new headline after results are shown
-app.post('/refresh', function(req, res) {
+router.post('/refresh', function(req, res) {
     if(req.body.AnothaOne == 'AnothaOne') {
         console.log(req.body.AnothaOne)
         res.redirect('/');
     }
 })
-
-//listen on specific port
-app.listen(port, function () {
-  console.log('App listening on port ' + port +'!');
-});
 
 module.exports = router;
