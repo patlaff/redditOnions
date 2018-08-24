@@ -4,13 +4,7 @@ var express           = require('express');
 var request           = require('request');
 var bodyParser        = require('body-parser');
 var router            = express.Router();
-
 router.use(bodyParser.urlencoded({ extended: true }));
-
-/*SET TEMPLATE ENGINE//
-const app = express();
-app.use(express.static('public'));
-app.set('view engine', 'ejs');*/
 
 //GLOBAL FUNCTIONS//
 function getRandomInt(max) {
@@ -23,7 +17,6 @@ function getNewHeadline() {
 //function getUserScore(guess) {}
 
 //GLOBAL VARIABLES//
-
 const subreddit = {0: 'nottheonion', 1: 'theonion'}
 let postIndex = getRandomInt(50);   //Used to pick a post from the Subreddit defined above
 let realOrFake = getRandomInt(2);   //0 = Real ; 1 = Fake
