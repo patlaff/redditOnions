@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-function getNewHeadline(maxIndex) {
+function getNewHeadline() {
     postIndex = getRandomInt(50);   //Used to pick a post from the Subreddit defined above
     realOrFake = getRandomInt(2);   //0 = Real ; 1 = Fake
 }
