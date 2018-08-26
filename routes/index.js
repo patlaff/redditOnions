@@ -8,7 +8,7 @@ var router            = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
 //GLOBAL VARIABLES//
-var url = 'https://www.reddit.com/r/TheOnion+nottheonion/top/.json?t=month&limit=100'
+var url = 'https://www.reddit.com/r/theonion+nottheonion/top/.json?t=month&limit=100'
 var postIndex = 0
 var headlineData = ''
 var resultText = ''
@@ -22,7 +22,7 @@ var headlines
 //Make Reddit API call, return all data
 request(url, { json: true }, (err, res, body) => {
     headlines = body.data.children
-    console.log(headlines.length)
+    console.log("Number of Posts: "+headlines.length)
 });
 
 //GLOBAL FUNCTIONS//
@@ -37,7 +37,7 @@ function getNewHeadline() {
 //Index Page. Display new headline, and prompt user for a guess
 router.get('/', function (req, response) {
     getNewHeadline()
-    console.log(headlineData.subreddit)
+    console.log("SubReddit: "+headlineData.subreddit)
     response.render('guessPage', {
         headline: headlineData.title, 
         userScore: userScore
@@ -46,24 +46,23 @@ router.get('/', function (req, response) {
 
 //Result Page. Display result of the guess made by user
 router.post('/result', function(req, res) {
-    console.log(req.body)
+    console.log("SubReddit: "+headlineData.subreddit)
+    console.log("Guess: "+req.body.guess)
     articleLink = headlineData.url
     redditLink = `https://www.reddit.com${headlineData.permalink}`
     if(req.body.guess == headlineData.subreddit) {
         resultText = 'CORRECT!'
         correctGuesses++
-        userScore = correctGuesses - wrongGuesses
-        console.log(resultText)
     } else {
-        if(req.body.guess == "nottheonion" && headlineData.subreddit == "theonion") {
+        if(req.body.guess == "nottheonion" && headlineData.subreddit == "TheOnion") {
             resultText = 'NOPE! That one was fake.'
         } else {
             resultText = 'NOPE! That one was real.'
         }
         wrongGuesses++
-        userScore = correctGuesses - wrongGuesses
-        console.log(resultText)
     }
+    userScore = correctGuesses - wrongGuesses
+    console.log(resultText)
     res.render('resultsPage', {
         result: resultText, 
         headline: headlineData.title,
