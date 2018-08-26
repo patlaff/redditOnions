@@ -53,22 +53,16 @@
 					<!-- Page Heading -->
 					<h1 class="text-center"><strong>Is this a real headline or a fake one?</strong></h1>
 					<p>&nbsp;</p>
-
-					<% if(headline !== null){ %>
-						<p class="lead" style="text-align:center""><%= headline %></p>
-					<% } %>
-					<% if(error !== null){ %>
-						<p class="lead" style="text-align:center"><%= error %></p>
-					<% } %>
+					<p class="lead" style="text-align:center""><%= headline %></p>
 					<hr>
 
 					<table cellspacing="90px" align="center">
 						<tbody>
 							<tr>
 								<form method="post" action="/result">
-									<td><button type="submit" class="btn btn-success btn-lg" name="guess" value=0>REAL</button></td>
+									<td><button type="submit" class="btn btn-success btn-lg" name="guess" value="nottheonion">REAL</button></td>
 									<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-									<td><button type="submit" class="btn btn-danger btn-lg" name="guess" value=1>FAKE</button></td>
+									<td><button type="submit" class="btn btn-danger btn-lg" name="guess" value="theonion">FAKE</button></td>
 								</form>
 							</tr>
 						</tbody>
