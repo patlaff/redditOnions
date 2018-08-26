@@ -17,7 +17,6 @@ router.use(session({
 //GLOBAL VARIABLES//
 var url = 'https://www.reddit.com/r/theonion+nottheonion/top/.json?t=month&limit=100'
 var postIndex = 0
-var headlineData = ''
 var resultText = ''
 var articleLink = ''
 var redditLink = ''
@@ -25,11 +24,16 @@ var correctGuesses = 0
 var wrongGuesses = 0
 var userScore = 0
 var headlines
+var headlineLookup = {}
 
 //Make Reddit API call, return all data
 request(url, { json: true }, (err, res, body) => {
     headlines = body.data.children
     console.log("Number of Posts: "+headlines.length)
+});
+
+headlines.forEach(function (headline) {
+    headlineLookup[headline.data.id] = headline.data;
 });
 
 //GLOBAL FUNCTIONS//
@@ -38,21 +42,26 @@ function getRandomInt(max) {
 };
 function getNewHeadline() {
     postIndex = getRandomInt(headlines.length)  //Used to pick a post from json array gathered from Reddit
-    headlineData = headlines[postIndex].data
+    return headlines[postIndex].data
 };
+function getHeadline(id) {
+    return headlineLookup[id];
+}
 
 //Index Page. Display new headline, and prompt user for a guess
 router.get('/', function (req, response) {
-    getNewHeadline()
+    var headlineData = getNewHeadline()
     console.log("SubReddit: "+headlineData.subreddit)
     response.render('guessPage', {
         headline: headlineData.title, 
+        headlineID: headlineData.id,
         userScore: userScore
     });
 });
 
 //Result Page. Display result of the guess made by user
-router.post('/result', function(req, res) {
+router.post('/result/:headlineID', function(req, res) {
+    var headlineData = getHeadline(req.params.headlineID)
     console.log("SubReddit: "+headlineData.subreddit)
     console.log("Guess: "+req.body.guess)
     articleLink = headlineData.url
@@ -73,6 +82,7 @@ router.post('/result', function(req, res) {
     res.render('resultsPage', {
         result: resultText, 
         headline: headlineData.title,
+        headlineID: headlineData.id,        
         articleLink: articleLink, 
         redditLink: redditLink, 
         userScore: userScore});
