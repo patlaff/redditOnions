@@ -3,6 +3,7 @@
 var express           = require('express');
 var request           = require('request');
 var bodyParser        = require('body-parser');
+var session           = require('express-session')
 var router            = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
