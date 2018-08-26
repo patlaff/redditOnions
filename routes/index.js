@@ -4,6 +4,7 @@ var express           = require('express');
 var request           = require('request');
 var bodyParser        = require('body-parser');
 var router            = express.Router();
+
 router.use(bodyParser.urlencoded({ extended: true }));
 
 //GLOBAL VARIABLES//
@@ -29,18 +30,21 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max))
 };
 function getNewHeadline() {
-    postIndex = getRandomInt(100)  //Used to pick a post from json array gathered from Reddit
+    postIndex = getRandomInt(headlines.length)  //Used to pick a post from json array gathered from Reddit
     headlineData = headlines[postIndex].data
 };
 
-//Display new headline, and prompt user for a guess
+//Index Page. Display new headline, and prompt user for a guess
 router.get('/', function (req, response) {
     getNewHeadline()
     console.log(headlineData.subreddit)
-    response.render('guessPage', {headline: headlineData.title, userScore: userScore, error: null});
+    response.render('guessPage', {
+        headline: headlineData.title, 
+        userScore: userScore
+    });
 });
 
-//display result of the guess made by user
+//Result Page. Display result of the guess made by user
 router.post('/result', function(req, res) {
     console.log(req.body)
     articleLink = headlineData.url
@@ -68,7 +72,7 @@ router.post('/result', function(req, res) {
         userScore: userScore});
   });
 
-//return user to guesspage with new headline after results are shown
+//Return user to guesspage with new headline after results are shown
 router.post('/refresh', function(req, res) {
     if(req.body.AnothaOne == 'AnothaOne') {
         res.redirect('/');
