@@ -7,6 +7,11 @@ var session           = require('express-session')
 var router            = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
+router.use(session({
+    secret: 'snoo',
+    resave: false,
+    saveUninitialized: true
+  }));
 
 //GLOBAL VARIABLES//
 var url = 'https://www.reddit.com/r/theonion+nottheonion/top/.json?t=month&limit=100'
