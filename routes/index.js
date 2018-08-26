@@ -9,6 +9,7 @@ var router            = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(session({
     secret: 'snoo',
+    cookie: {},
     resave: false,
     saveUninitialized: true
   }));
