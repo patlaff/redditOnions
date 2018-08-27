@@ -17,12 +17,6 @@ router.use(session({
 var url = 'https://www.reddit.com/r/TheOnion+nottheonion/top/.json?t=month&limit=100'
 var postIndex = 0
 var ssn
-//var resultText = ''
-//var articleLink = ''
-//var redditLink = ''
-//var correctGuesses = 0
-//var wrongGuesses = 0
-//var userScore = 0
 var headlines
 var headlineLookup = {}
 
