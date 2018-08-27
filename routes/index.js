@@ -9,20 +9,20 @@ const router            = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(session({
     secret: 'snoo',
-    cookie: {},
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   }));
 
 //GLOBAL VARIABLES//
 var url = 'https://www.reddit.com/r/TheOnion+nottheonion/top/.json?t=month&limit=100'
 var postIndex = 0
-var resultText = ''
-var articleLink = ''
-var redditLink = ''
-var correctGuesses = 0
-var wrongGuesses = 0
-var userScore = 0
+var ssn
+//var resultText = ''
+//var articleLink = ''
+//var redditLink = ''
+//var correctGuesses = 0
+//var wrongGuesses = 0
+//var userScore = 0
 var headlines
 var headlineLookup = {}
 
@@ -48,18 +48,23 @@ function getHeadline(id) {
 }
 
 //Index Page. Display new headline, and prompt user for a guess
-router.get('/', function (req, response) {
+router.get('/', function (req, res) {
+    ssn = req.session;
     var headlineData = getNewHeadline()
     console.log("SubReddit: "+headlineData.subreddit)
-    response.render('guessPage', {
+    //ssn.userScore =
+    res.render('guessPage', {
         headline: headlineData.title, 
-        headlineID: headlineData.id,
-        userScore: userScore
+        headlineID: headlineData.id
+        //userScore: userScore
     });
 });
 
 //Result Page. Display result of the guess made by user
 router.post('/result/:headlineID', function(req, res) {
+    ssn = req.session
+    var resultText, articleLink, redditLink
+    var correctGuesses, wrongGuesses, userScore
     var headlineData = getHeadline(req.params.headlineID)
     console.log("SubReddit: "+headlineData.subreddit)
     console.log("Guess: "+req.body.guess)
@@ -79,13 +84,14 @@ router.post('/result/:headlineID', function(req, res) {
     userScore = correctGuesses - wrongGuesses
     console.log(resultText)
     res.render('resultsPage', {
-        result: resultText, 
+        result: resultText,
         headline: headlineData.title,
-        headlineID: headlineData.id,        
+        headlineID: headlineData.id,
         articleLink: articleLink, 
-        redditLink: redditLink, 
-        userScore: userScore});
-  });
+        redditLink: redditLink
+        //userScore: ssn.userScore
+    });
+});
 
 //Return user to guesspage with new headline after results are shown
 router.post('/refresh', function(req, res) {
