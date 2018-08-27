@@ -1,10 +1,10 @@
 
 //REQUIRE STATMENTS//
-var express           = require('express');
-var request           = require('request');
-var bodyParser        = require('body-parser');
-var session           = require('express-session')
-var router            = express.Router();
+const express           = require('express');
+const request           = require('request');
+const bodyParser        = require('body-parser');
+const session           = require('express-session')
+const router            = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(session({
@@ -15,7 +15,7 @@ router.use(session({
   }));
 
 //GLOBAL VARIABLES//
-var url = 'https://www.reddit.com/r/theonion+nottheonion/top/.json?t=month&limit=100'
+var url = 'https://www.reddit.com/r/TheOnion+nottheonion/top/.json?t=month&limit=100'
 var postIndex = 0
 var resultText = ''
 var articleLink = ''
@@ -30,10 +30,9 @@ var headlineLookup = {}
 request(url, { json: true }, (err, res, body) => {
     headlines = body.data.children
     console.log("Number of Posts: "+headlines.length)
-});
-
-headlines.forEach(function (headline) {
-    headlineLookup[headline.data.id] = headline.data;
+    headlines.forEach(function (headline) {
+        headlineLookup[headline.data.id] = headline.data;
+    });
 });
 
 //GLOBAL FUNCTIONS//
