@@ -14,12 +14,11 @@ router.use(session({
   }));
 
 //GLOBAL VARIABLES//
-
-const getSubredditUrl = (subreddit) => `'https://www.reddit.com/r/${subreddit}/top/.json?t=month&limit=100`
 const subreddits = ['nottheonion', 'TheOnion']
+const getSubredditUrl = (subreddit) => `https://www.reddit.com/r/${subreddit}/top/.json?t=month&limit=100`
 var postIndex = 0
 var ssn
-var headlines
+var headlines = []
 var headlineLookup = {}
 
 subreddits.forEach((subreddit) => {
