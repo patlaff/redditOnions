@@ -14,20 +14,25 @@ router.use(session({
   }));
 
 //GLOBAL VARIABLES//
-var url = 'https://www.reddit.com/r/TheOnion+nottheonion/top/.json?t=month&limit=100'
+
+const getSubredditUrl = (subreddit) => `'https://www.reddit.com/r/${subreddit}/top/.json?t=month&limit=100`
+const subreddits = ['nottheonion', 'TheOnion']
 var postIndex = 0
 var ssn
 var headlines
 var headlineLookup = {}
 
-//Make Reddit API call, return all data
-request(url, { json: true }, (err, res, body) => {
-    headlines = body.data.children
-    console.log("Number of Posts: "+headlines.length)
-    headlines.forEach(function (headline) {
-        headlineLookup[headline.data.id] = headline.data;
-    });
-});
+subreddits.forEach((subreddit) => {
+    var url = getSubredditUrl(subreddit)
+    request(url, { json: true }, (err, res, body) => {
+        var sub_headlines = body.data.children
+        headlines.push(...sub_headlines)
+        console.log("Number of Posts: "+headlines.length)
+        sub_headlines.forEach(function (headline) {
+            headlineLookup[headline.data.id] = headline.data;
+        });
+    })
+})
 
 //GLOBAL FUNCTIONS//
 function getRandomInt(max) {
