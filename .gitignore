@@ -2,6 +2,7 @@ node_modules/
 .vscode
 .DS_Store
 .elasticbeanstalk/
+.ebextensions/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

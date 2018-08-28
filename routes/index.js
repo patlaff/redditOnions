@@ -21,6 +21,7 @@ var ssn
 var headlines = []
 var headlineLookup = {}
 
+//Make requests to each subreddit and fill headlines[] variable with 100 top posts from the last month each
 subreddits.forEach((subreddit) => {
     var url = getSubredditUrl(subreddit)
     request(url, { json: true }, (err, res, body) => {
