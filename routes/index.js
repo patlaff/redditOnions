@@ -1,4 +1,3 @@
-
 //REQUIRE STATMENTS//
 const express           = require('express');
 const request           = require('request');
@@ -38,13 +37,6 @@ subreddits.forEach((subreddit) => {
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max))
 };
-function getNewHeadline() {
-    postIndex = getRandomInt(headlines.length)  //Used to pick a post from json array gathered from Reddit
-    return headlines[postIndex].data
-};
-function getHeadline(id) {
-    return headlineLookup[id];
-}
 function titleCase(str) {
     return str.replace(
         /\w\S*/g,
@@ -52,6 +44,13 @@ function titleCase(str) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );
+}
+function getNewHeadline() {
+    postIndex = getRandomInt(headlines.length)  //Used to pick a post from json array gathered from Reddit
+    return headlines[postIndex].data
+};
+function getHeadline(id) {
+    return headlineLookup[id];
 }
 
 //Index Page. Display new headline, and prompt user for a guess
