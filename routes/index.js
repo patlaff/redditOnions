@@ -45,6 +45,14 @@ function getNewHeadline() {
 function getHeadline(id) {
     return headlineLookup[id];
 }
+function titleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
 
 //Index Page. Display new headline, and prompt user for a guess
 router.get('/', function (req, res) {
@@ -53,7 +61,7 @@ router.get('/', function (req, res) {
     console.log("SubReddit: "+headlineData.subreddit)
     //ssn.userScore =
     res.render('guessPage', {
-        headline: headlineData.title, 
+        headline: titleCase(headlineData.title), 
         headlineID: headlineData.id
         //userScore: userScore
     });
@@ -84,7 +92,7 @@ router.post('/result/:headlineID', function(req, res) {
     console.log(resultText)
     res.render('resultsPage', {
         result: resultText,
-        headline: headlineData.title,
+        headline: titleCase(headlineData.title),
         headlineID: headlineData.id,
         articleLink: articleLink, 
         redditLink: redditLink
