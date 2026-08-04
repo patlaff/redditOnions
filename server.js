@@ -11,10 +11,11 @@ if (!Number.isInteger(port) || port < 0 || port > 65535) {
 }
 
 /**
- * Live Reddit fetching is opt-in, because in the default deployment it cannot
- * work: Reddit requires per-app approval for API credentials and blocks AWS IP
- * ranges outright, which rules out both the authenticated and the anonymous
- * endpoints from Elastic Beanstalk. Unset, the app just serves the corpus.
+ * Live Reddit fetching is opt-in, and off by default, because neither path is
+ * dependable: OAuth credentials now require per-app approval from Reddit, and
+ * the keyless endpoints — which need no approval — are blocked outright from
+ * many hosting providers' IP ranges. Unset, the app serves the committed corpus
+ * and needs no network access at all.
  */
 function createLiveClient() {
   if (process.env.REDDIT_CLIENT_ID) {
@@ -24,7 +25,8 @@ function createLiveClient() {
   if (process.env.REDDIT_ANONYMOUS === '1') {
     console.warn(
       'REDDIT_ANONYMOUS=1; using unauthenticated Reddit requests. These are rate ' +
-        'limited and blocked from most hosting providers — intended for local use.',
+        'limited, and blocked from many hosting providers — check /healthz to ' +
+        'see whether refreshes are actually landing.',
     );
     return createRedditClient();
   }
@@ -53,7 +55,7 @@ store.load().catch((err) => console.error('Initial headline load failed:', err))
 store.start();
 
 const server = createApp({ store }).listen(port, () => {
-  console.log(`Reddit Onions listening on http://localhost:${server.address().port}`);
+  console.log(`Onion or Not listening on http://localhost:${server.address().port}`);
 });
 
 server.on('error', (error) => {
@@ -69,8 +71,8 @@ server.on('error', (error) => {
   throw error;
 });
 
-// Elastic Beanstalk (and Docker, and Ctrl-C) stop the process with a signal;
-// finish in-flight requests instead of dropping them.
+// Docker (and Ctrl-C) stop the process with a signal; finish in-flight requests
+// instead of dropping them.
 for (const signal of ['SIGTERM', 'SIGINT']) {
   process.on(signal, () => {
     console.log(`${signal} received, shutting down.`);

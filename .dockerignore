@@ -1,0 +1,26 @@
+# Everything the image does not need. Keeping the build context small speeds up
+# builds and keeps local secrets out of the image entirely.
+.git
+.github
+.vscode
+node_modules
+npm-debug.log*
+.DS_Store
+
+# Never let a local .env become part of an image layer.
+.env
+.env.*
+!.env.example
+
+# Dev-only: tests, linting, and the corpus refresh command all run on a
+# workstation, never in the container.
+test
+scripts
+eslint.config.js
+
+Dockerfile
+.dockerignore
+compose.yaml
+Caddyfile
+README.md
+.nvmrc

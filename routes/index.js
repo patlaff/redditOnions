@@ -28,7 +28,7 @@ export function createRouter({ store }) {
       );
     }
     res.render('guess', {
-      title: 'Reddit Onions',
+      title: 'Onion or Not',
       headline: titleCase(headline.title),
       headlineId: headline.id,
       score: readScore(req.session),
@@ -51,7 +51,7 @@ export function createRouter({ store }) {
     const score = recordGuess(req.session, { headlineId: headline.id, correct });
 
     res.render('result', {
-      title: correct ? 'Correct! — Reddit Onions' : 'Nope — Reddit Onions',
+      title: correct ? 'Correct! — Onion or Not' : 'Nope — Onion or Not',
       correct,
       verdict: correct ? 'Correct!' : 'Nope.',
       explanation: headline.isFake

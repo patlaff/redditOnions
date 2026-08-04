@@ -4,7 +4,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Run Reddit Onions",
+			"name": "Run Onion or Not",
 			"program": "${workspaceFolder}/server.js",
 			"env": { "NODE_ENV": "development" },
 			"skipFiles": ["<node_internals>/**"]

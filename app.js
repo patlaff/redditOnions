@@ -32,10 +32,10 @@ export function createApp({
 } = {}) {
   const app = express();
 
-  // Behind the Elastic Beanstalk load balancer the app only sees the proxy's
-  // connection, so `secure` cookies and real client IPs need X-Forwarded-*. Opt in
-  // explicitly (TRUST_PROXY=1) — trusting those headers when nothing strips them
-  // lets clients spoof their own address.
+  // Behind the reverse proxy the app only sees the proxy's connection, so
+  // `secure` cookies and real client IPs need X-Forwarded-*. Opt in explicitly
+  // (TRUST_PROXY=1) — trusting those headers when nothing strips them lets
+  // clients spoof their own address.
   if (process.env.TRUST_PROXY) {
     app.set('trust proxy', process.env.TRUST_PROXY);
   }
@@ -77,7 +77,7 @@ export function createApp({
 
   app.use(
     session({
-      name: 'redditonions.sid',
+      name: 'onionornot.sid',
       secret: resolveSessionSecret(sessionSecret),
       resave: false,
       saveUninitialized: false,
@@ -113,7 +113,7 @@ export function createApp({
     if (status >= 500 && !err.expose) console.error(err);
 
     res.status(status).render('error', {
-      title: `${status} — Reddit Onions`,
+      title: `${status} — Onion or Not`,
       status,
       message,
       stack: isDevelopment ? err.stack : null,

@@ -1,7 +1,7 @@
 {
-  "name": "redditonions",
+  "name": "onion-or-not",
   "version": "1.0.0",
-  "description": "Guess whether a Reddit headline came from r/nottheonion or r/TheOnion.",
+  "description": "Onion or Not — guess whether a headline came from r/nottheonion or r/TheOnion.",
   "private": true,
   "type": "module",
   "license": "MIT",

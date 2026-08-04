@@ -29,3 +29,28 @@ jobs:
 
       - name: Check for known vulnerabilities
         run: npm audit --audit-level=high
+
+  # The deployment is a container, so a green test run that produces an image
+  # nobody can build is not actually green.
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the production image
+        run: docker build -t onion-or-not:ci .
+
+      - name: Check it serves the corpus
+        run: |
+          docker run -d --name onionornot -e SESSION_SECRET=ci-only-not-a-secret \
+            -p 127.0.0.1:3000:3000 onion-or-not:ci
+          for i in $(seq 1 30); do
+            curl -sf localhost:3000/healthz > /dev/null && break || sleep 1
+          done
+          curl -sf localhost:3000/healthz | tee /dev/stderr | grep -q '"status":"ok"'
+          curl -sf localhost:3000/ | grep -q 'Onion or Not'
+
+      - name: Container logs on failure
+        if: failure()
+        run: docker logs onionornot
