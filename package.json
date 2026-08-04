@@ -1,21 +1,36 @@
 {
-  "name": "redditonions-aws",
-  "version": "0.0.0",
+  "name": "redditonions",
+  "version": "1.0.0",
+  "description": "Guess whether a Reddit headline came from r/nottheonion or r/TheOnion.",
   "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patlaff/redditOnions.git"
+  },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node --watch server.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
-    "debug": "^4.4.3",
     "ejs": "^3.1.10",
-    "express": "^4.22.2",
+    "express": "^5.1.0",
     "express-session": "^1.19.0",
     "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
     "morgan": "^1.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^16.0.0"
   }
 }

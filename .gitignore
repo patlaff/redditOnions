@@ -1,9 +1,14 @@
 node_modules/
-.vscode
+npm-debug.log*
 .DS_Store
-.elasticbeanstalk/
-.ebextensions/
-# Elastic Beanstalk Files
+
+# Local secrets — REDDIT_CLIENT_SECRET, SESSION_SECRET, etc.
+.env
+.env.*
+!.env.example
+
+# Elastic Beanstalk local state. Note that .ebextensions/ IS tracked: those
+# config files have to ship with the deployment bundle.
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml

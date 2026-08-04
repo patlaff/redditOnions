@@ -1,0 +1,25 @@
+<section class="scoreboard" aria-label="Your score">
+  <dl class="scoreboard__stats">
+    <div class="stat">
+      <dt>Score</dt>
+      <dd><%= score.correct %><span class="stat__of">/<%= score.total %></span></dd>
+    </div>
+    <div class="stat">
+      <dt>Accuracy</dt>
+      <dd><%= score.accuracy === null ? '—' : score.accuracy + '%' %></dd>
+    </div>
+    <div class="stat">
+      <dt>Streak</dt>
+      <dd><%= score.streak %><% if (score.streak >= 3) { %><span class="stat__flame" aria-hidden="true">🔥</span><% } %></dd>
+    </div>
+    <div class="stat">
+      <dt>Best</dt>
+      <dd><%= score.bestStreak %></dd>
+    </div>
+  </dl>
+  <% if (score.total > 0) { %>
+    <form method="post" action="/reset">
+      <button type="submit" class="btn btn--ghost btn--small">Reset</button>
+    </form>
+  <% } %>
+</section>

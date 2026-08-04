@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="page">
+    <%- include('partials/scoreboard') %>
+
+    <article class="card card--<%= correct ? 'correct' : 'wrong' %>">
+      <h1 class="verdict"><%= verdict %></h1>
+      <p class="verdict__detail"><%= explanation %></p>
+
+      <p class="headline headline--result"><%= headline %></p>
+
+      <p class="source">
+        <a class="badge badge--<%= correct ? 'correct' : 'wrong' %>"
+           href="https://www.reddit.com/r/<%= subreddit %>/"
+           rel="noopener noreferrer external">r/<%= subreddit %></a>
+      </p>
+
+      <div class="links">
+        <% if (articleUrl) { %>
+          <a class="btn btn--ghost" href="<%= articleUrl %>" rel="noopener noreferrer external">Read the article</a>
+        <% } %>
+        <% if (redditUrl) { %>
+          <a class="btn btn--ghost" href="<%= redditUrl %>" rel="noopener noreferrer external">Reddit comments</a>
+        <% } %>
+      </div>
+
+      <p class="next">
+        <a class="btn btn--next" href="/" data-autofocus>
+          <span class="btn__label">Another one</span>
+          <kbd class="btn__key" aria-hidden="true">↵</kbd>
+        </a>
+      </p>
+    </article>
+  </main>
+
+  <%- include('partials/footer') %>
+  <script src="/js/keys.js" defer></script>
+</body>
+</html>

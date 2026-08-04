@@ -1,140 +1,84 @@
-//REQUIRE STATMENTS//
-const express           = require('express');
-const createError       = require('http-errors');
-const router            = express.Router();
+import express from 'express';
+import createError from 'http-errors';
 
-//GLOBAL VARIABLES//
-const subreddits = ['nottheonion', 'TheOnion']
-const getSubredditUrl = (subreddit) => `https://www.reddit.com/r/${subreddit}/top/.json?t=month&limit=100`
-const REFRESH_INTERVAL_MS = 60 * 60 * 1000  //Re-pull headlines hourly so the pool stays fresh
-const FETCH_TIMEOUT_MS = 10 * 1000
-var headlines = []
-//Null-prototype map so a headline ID like "__proto__" or "constructor" can never
-//resolve to an inherited Object property instead of a real headline.
-var headlineLookup = Object.create(null)
+import { readScore, recordGuess, resetScore } from '../lib/score.js';
+import { titleCase } from '../lib/text.js';
 
-//Make requests to each subreddit and fill headlines[] variable with 100 top posts from the last month each
-async function loadHeadlines() {
-    const nextHeadlines = []
-    const nextLookup = Object.create(null)
-    for (const subreddit of subreddits) {
-        try {
-            const res = await fetch(getSubredditUrl(subreddit), {
-                headers: { 'Accept': 'application/json', 'User-Agent': 'redditonions/1.0' },
-                redirect: 'error',  //Reddit should answer directly; never chase a redirect elsewhere
-                signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
-            })
-            if (!res.ok) {
-                console.error(`Failed to load r/${subreddit}: HTTP ${res.status}`)
-                continue
-            }
-            const body = await res.json()
-            const sub_headlines = body && body.data && Array.isArray(body.data.children)
-                ? body.data.children
-                : []
-            for (const headline of sub_headlines) {
-                //Only keep posts we can actually render and link safely
-                if (!headline || !headline.data || typeof headline.data.id !== 'string') continue
-                const data = headline.data
-                if (typeof data.title !== 'string' || typeof data.subreddit !== 'string') continue
-                nextHeadlines.push(headline)
-                nextLookup[data.id] = data
-            }
-        } catch (err) {
-            //A failure on one subreddit must not take the process down
-            console.error(`Failed to load r/${subreddit}:`, err.message)
-        }
+/** The two buttons on the guess page, mapped to what they claim about the post. */
+const GUESSES = new Map([
+  ['real', { isFake: false }],
+  ['fake', { isFake: true }],
+]);
+
+export function createRouter({ store }) {
+  const router = express.Router();
+
+  /** Show a random headline and ask the player to call it. */
+  router.get('/', (req, res, next) => {
+    const headline = store.random();
+    if (!headline) {
+      // `expose` because this one is an operational state worth telling the
+      // player about, not an internal failure to hide behind a generic message.
+      return next(
+        createError(503, 'Headlines are still loading. Try again in a moment.', { expose: true }),
+      );
     }
-    if (nextHeadlines.length === 0) {
-        console.error('No headlines loaded; keeping the previously loaded set')
-        return
-    }
-    headlines = nextHeadlines
-    headlineLookup = nextLookup
-    console.log("Number of Posts: " + headlines.length)
-}
-
-loadHeadlines()
-setInterval(loadHeadlines, REFRESH_INTERVAL_MS).unref()
-
-//GLOBAL FUNCTIONS//
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max))
-};
-function titleCase(str) {
-    return str.replace(
-        /\w\S*/g,
-        function(txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }
-    );
-}
-function getNewHeadline() {
-    if (headlines.length === 0) return null
-    //Kept local: a shared index would race between concurrent requests
-    const postIndex = getRandomInt(headlines.length)
-    return headlines[postIndex].data
-};
-function getHeadline(id) {
-    if (typeof id !== 'string') return null
-    return headlineLookup[id] || null
-}
-//Reddit is the source of these URLs, but never emit a scheme the browser will
-//execute (javascript:, data:) into an href.
-function safeLink(url) {
-    if (typeof url !== 'string') return null
-    try {
-        const parsed = new URL(url)
-        return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : null
-    } catch (err) {
-        return null
-    }
-}
-
-//Index Page. Display new headline, and prompt user for a guess
-router.get('/', function (req, res, next) {
-    var headlineData = getNewHeadline()
-    if (!headlineData) {
-        return next(createError(503, 'Headlines are still loading, try again shortly.'))
-    }
-    res.render('guessPage', {
-        headline: titleCase(headlineData.title),
-        headlineID: headlineData.id
+    res.render('guess', {
+      title: 'Reddit Onions',
+      headline: titleCase(headline.title),
+      headlineId: headline.id,
+      score: readScore(req.session),
     });
-});
+  });
 
-//Result Page. Display result of the guess made by user
-router.post('/result/:headlineID', function(req, res, next) {
-    var resultText
-    var headlineData = getHeadline(req.params.headlineID)
-    if (!headlineData) {
-        return next(createError(404, 'Unknown headline.'))
+  /** Reveal the answer for a guess. */
+  router.post('/result/:headlineId', (req, res, next) => {
+    const headline = store.get(req.params.headlineId);
+    if (!headline) {
+      return next(createError(404, 'That headline is no longer in the pool. Try another one.'));
     }
-    const guess = typeof req.body.guess === 'string' ? req.body.guess : ''
-    if (guess !== 'nottheonion' && guess !== 'TheOnion') {
-        return next(createError(400, 'Invalid guess.'))
+
+    const guess = GUESSES.get(String(req.body.guess).toLowerCase());
+    if (!guess) {
+      return next(createError(400, 'That is not a valid guess.'));
     }
-    if (guess == headlineData.subreddit) {
-        resultText = 'CORRECT!'
-    } else {
-        if (guess == "nottheonion" && headlineData.subreddit == "TheOnion") {
-            resultText = 'NOPE! That one was fake.'
-        } else {
-            resultText = 'NOPE! That one was real.'
-        }
-    }
-    res.render('resultsPage', {
-        result: resultText,
-        headline: titleCase(headlineData.title),
-        headlineID: headlineData.id,
-        articleLink: safeLink(headlineData.url),
-        redditLink: safeLink(`https://www.reddit.com${headlineData.permalink}`)
+
+    const correct = guess.isFake === headline.isFake;
+    const score = recordGuess(req.session, { headlineId: headline.id, correct });
+
+    res.render('result', {
+      title: correct ? 'Correct! — Reddit Onions' : 'Nope — Reddit Onions',
+      correct,
+      verdict: correct ? 'Correct!' : 'Nope.',
+      explanation: headline.isFake
+        ? 'That one was satire, straight from The Onion.'
+        : 'That one actually happened.',
+      headline: titleCase(headline.title),
+      subreddit: headline.subreddit,
+      articleUrl: headline.articleUrl,
+      redditUrl: headline.redditUrl,
+      score,
     });
-});
+  });
 
-//Return user to guesspage with new headline after results are shown
-router.post('/refresh', function(req, res) {
+  /** Clear the running score. */
+  router.post('/reset', (req, res) => {
+    resetScore(req.session);
     res.redirect('/');
-})
+  });
 
-module.exports = router;
+  /** Liveness probe for the load balancer, and a quick way to see refresh health. */
+  router.get('/healthz', (req, res) => {
+    const { size, lastLoadedAt, lastError } = store.status;
+    res.status(size > 0 ? 200 : 503).json({
+      status: size > 0 ? 'ok' : 'loading',
+      headlines: size,
+      lastLoadedAt,
+      lastError,
+    });
+  });
+
+  return router;
+}
+
+export default createRouter;
