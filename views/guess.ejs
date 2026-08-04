@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="page">
+    <%- include('partials/scoreboard') %>
+
+    <article class="card">
+      <p class="card__prompt">Real headline, or Onion headline?</p>
+      <h1 class="headline"><%= headline %></h1>
+
+      <form class="choices" method="post" action="/result/<%= headlineId %>">
+        <button type="submit" class="btn btn--real" name="guess" value="real">
+          <span class="btn__label">Real</span>
+          <kbd class="btn__key" aria-hidden="true">R</kbd>
+        </button>
+        <button type="submit" class="btn btn--fake" name="guess" value="fake">
+          <span class="btn__label">Fake</span>
+          <kbd class="btn__key" aria-hidden="true">F</kbd>
+        </button>
+      </form>
+    </article>
+
+    <p class="hint">It really happened, or The Onion made it up. Trust your gut.</p>
+  </main>
+
+  <%- include('partials/footer') %>
+  <script src="/js/keys.js" defer></script>
+</body>
+</html>

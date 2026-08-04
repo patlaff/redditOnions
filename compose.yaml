@@ -1,0 +1,40 @@
+name: onion-or-not
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    # `:?` fails the command with a readable error instead of silently starting
+    # with a per-process random secret that resets every score on restart.
+    environment:
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env — generate one with `openssl rand -hex 32`}
+      # Caddy terminates TLS and forwards X-Forwarded-*, so the app needs to
+      # trust them to mark cookies Secure and log real client IPs.
+      TRUST_PROXY: '1'
+    # Published on loopback only: the internet reaches the app through Caddy, but
+    # the port is there for `curl localhost:3000/healthz` and for pointing an
+    # existing reverse proxy at it instead (see the README).
+    ports:
+      - '127.0.0.1:3000:3000'
+    # PID 1 in a container gets no default signal handling or zombie reaping;
+    # the app's own SIGTERM handler still runs, this just makes it well-behaved.
+    init: true
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Certificates and ACME account keys live here. Losing this volume means
+      # re-issuing certificates, which Let's Encrypt rate limits — keep it.
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
+  caddy_config:

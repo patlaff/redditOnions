@@ -1,3 +1,20 @@
-<h1><%= message %></h1>
-<% if (error && error.status) { %><h2><%= error.status %></h2><% } %>
-<% if (error && error.stack) { %><pre><%= error.stack %></pre><% } %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="page">
+    <article class="card card--error">
+      <p class="card__prompt"><%= status %></p>
+      <h1 class="verdict verdict--message"><%= message %></h1>
+      <% if (stack) { %><pre class="stack"><%= stack %></pre><% } %>
+      <p class="next"><a class="btn btn--next" href="/" data-autofocus>Back to the game</a></p>
+    </article>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

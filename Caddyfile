@@ -1,0 +1,13 @@
+# Caddy gets and renews a Let's Encrypt certificate for this name on its own, so
+# long as the DNS A/AAAA record points here and ports 80 and 443 reach this host.
+onionornot.patlaff.com {
+	encode zstd gzip
+
+	# `app` resolves over the compose network; the app itself only ever listens
+	# on plain HTTP inside it.
+	reverse_proxy app:3000
+
+	log {
+		output stderr
+	}
+}

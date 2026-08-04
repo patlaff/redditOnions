@@ -1,9 +1,11 @@
 node_modules/
-.vscode
+npm-debug.log*
 .DS_Store
-.elasticbeanstalk/
-.ebextensions/
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+
+# Local secrets — REDDIT_CLIENT_SECRET, SESSION_SECRET, etc.
+.env
+.env.*
+!.env.example
+
+# Caddy's certificate store and compose state live in named volumes, not the
+# repo, so there is nothing deployment-specific to ignore here.

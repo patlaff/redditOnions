@@ -1,75 +1,473 @@
-/*------------------------------------*\
-	#OVERRIDE STLES
-	This style sheet can be used for two different functions:
-	1. Override specific Bootstrap styles.
-	2. Add your own styles.
-\*------------------------------------*/
+/*
+ * Onion or Not — single stylesheet, no framework.
+ *
+ * Dark by default with a light-mode override; every color goes through a custom
+ * property so the two themes stay in sync.
+ */
 
-/**
- * Padding-top is required if using .navbar-fixed-top.
- * This can be removed Remove if using .navbar-static-top.
- * The height may need to be changed if the height of you
- * navigation changes.
-*/
+:root {
+  color-scheme: dark light;
 
-body { padding-top: 70px; }
+  --bg: #100e0d;
+  --bg-glow: #1d1815;
+  --surface: #191614;
+  --surface-raised: #221d1a;
+  --border: #332c27;
+  --border-strong: #4a4038;
 
+  --text: #f5efe8;
+  --text-muted: #a89b8f;
+  --text-faint: #7d7167;
 
+  --accent: #c98a3c;
+  --accent-soft: rgba(201, 138, 60, 0.16);
+  --real: #4ea86b;
+  --real-soft: rgba(78, 168, 107, 0.14);
+  --fake: #d1544f;
+  --fake-soft: rgba(209, 84, 79, 0.14);
 
-/**
- * Bootstrap requires a containing element to wrap site contents 
- * and house the grid system. You may choose one of two containers.
- * Use .container for a responsive fixed width container.
- * Use .container-fluid for a full width container.
- 
- * If using container-fluid, you may need to set a maximum width, 
- * so that the container will not spread to the entire viewport.
-*/
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  --radius: 14px;
+  --radius-lg: 20px;
 
-.container-fluid { max-width: 1200px; }
-
-
-
-/**
- * Bootstrap pushes the .navbar-brand over to the left, which may not suit.
- * This can be overridden using the following rule:
-*/
-
-.navbar>.container .navbar-brand, 
-.navbar>.container-fluid .navbar-brand {
-	position: fixed;
-	top: 25px;
-	left: 50%;
-	margin-top: -25px;
-	margin-left: -25px;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f2ec;
+    --bg-glow: #fffdf9;
+    --surface: #ffffff;
+    --surface-raised: #fffcf7;
+    --border: #e4dcd0;
+    --border-strong: #cfc3b3;
 
+    --text: #1d1815;
+    --text-muted: #6b5f55;
+    --text-faint: #8b7f73;
 
-/**
- * At small screen, padding can be added around the branding 
- * image so that it lines up with the navbar toggle.
-*/
+    --accent: #a2661f;
+    --accent-soft: rgba(162, 102, 31, 0.12);
+    --real: #2f7d4c;
+    --real-soft: rgba(47, 125, 76, 0.1);
+    --fake: #b8322d;
+    --fake-soft: rgba(184, 50, 45, 0.1);
 
-.navbar-fixed-top .navbar-brand { padding: 0px 0 0px 0px; }
-
-
-
-/**
- * At mid to wide screen, padding can be added around the branding 
- * image so that it lines up with the navigation items.
-*/
-
-@media (min-width:768px)
-{
-	.navbar-fixed-top .navbar-brand { padding: 0px 0px 0 0; }
+    --shadow: 0 1px 2px rgb(60 45 30 / 0.06), 0 12px 28px -14px rgb(60 45 30 / 0.25);
+  }
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-/**
- * Headline copy. Kept here rather than in a style="" attribute so the Content
- * Security Policy can forbid inline styles outright.
-*/
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  background-image: radial-gradient(80rem 40rem at 50% -20%, var(--bg-glow), transparent 70%);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.075rem);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
 
-.headline { text-align: center; }
-.navbar-brand-logo { max-height: 50px; }
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------- masthead */
+
+.masthead {
+  padding: 1.25rem 1.25rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.brand__mark {
+  width: 2rem;
+  height: auto;
+}
+
+.brand__name {
+  font-size: 1.05rem;
+}
+
+/* ------------------------------------------------------------------- page */
+
+.page {
+  flex: 1;
+  width: min(100% - 2rem, 44rem);
+  margin-inline: auto;
+  padding-block: 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Sit in the middle of a tall viewport. */
+  gap: 1.25rem;
+}
+
+/* ------------------------------------------------------------- scoreboard */
+
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.scoreboard__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  margin: 0;
+}
+
+.stat dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+}
+
+.stat dd {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.stat__of {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.stat__flame {
+  margin-left: 0.15rem;
+  font-size: 0.9rem;
+}
+
+/* ------------------------------------------------------------------- card */
+
+.card {
+  padding: clamp(1.5rem, 1rem + 3vw, 2.75rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+  box-shadow: var(--shadow);
+  text-align: center;
+  animation: rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.card--correct {
+  border-color: color-mix(in srgb, var(--real) 45%, var(--border));
+  background: linear-gradient(180deg, var(--real-soft), var(--surface) 60%);
+}
+
+.card--wrong {
+  border-color: color-mix(in srgb, var(--fake) 45%, var(--border));
+  background: linear-gradient(180deg, var(--fake-soft), var(--surface) 60%);
+}
+
+.card--error {
+  border-color: var(--border-strong);
+}
+
+.card__prompt {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+}
+
+.headline {
+  margin: 0 0 1.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 1.1rem + 2.4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.headline--result {
+  font-size: clamp(1.15rem, 0.95rem + 1.2vw, 1.5rem);
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.verdict {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.9rem, 1.4rem + 2.5vw, 2.75rem);
+  letter-spacing: -0.02em;
+}
+
+.card--correct .verdict {
+  color: var(--real);
+}
+
+.card--wrong .verdict {
+  color: var(--fake);
+}
+
+/* Error copy is a sentence rather than a one-word verdict, so it runs smaller. */
+.verdict--message {
+  font-size: clamp(1.3rem, 1.05rem + 1.3vw, 1.75rem);
+  line-height: 1.3;
+  text-wrap: balance;
+  margin-bottom: 1.75rem;
+}
+
+.verdict__detail {
+  margin: 0 0 1.5rem;
+  color: var(--text-muted);
+}
+
+.source {
+  margin: 0 0 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.badge--correct {
+  border-color: color-mix(in srgb, var(--real) 55%, transparent);
+  color: var(--real);
+}
+
+.badge--wrong {
+  border-color: color-mix(in srgb, var(--fake) 55%, transparent);
+  color: var(--fake);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--real,
+.btn--fake {
+  padding-block: 1.15rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.btn--real {
+  border-color: color-mix(in srgb, var(--real) 55%, transparent);
+  background: var(--real-soft);
+  color: var(--real);
+}
+
+.btn--real:hover {
+  background: color-mix(in srgb, var(--real) 22%, transparent);
+  border-color: var(--real);
+}
+
+.btn--fake {
+  border-color: color-mix(in srgb, var(--fake) 55%, transparent);
+  background: var(--fake-soft);
+  color: var(--fake);
+}
+
+.btn--fake:hover {
+  background: color-mix(in srgb, var(--fake) 22%, transparent);
+  border-color: var(--fake);
+}
+
+.btn--next {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 1.05rem;
+  padding-inline: 1.75rem;
+}
+
+.btn--next:hover {
+  background: color-mix(in srgb, var(--accent) 85%, var(--text));
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.btn--ghost:hover {
+  color: var(--text);
+}
+
+.btn--small {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+}
+
+.btn__key {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  opacity: 0.5;
+  font-family: inherit;
+  font-size: 0.72em;
+  line-height: 1.5;
+}
+
+/* Touch devices have no keyboard to hint at. */
+@media (pointer: coarse) {
+  .btn__key {
+    display: none;
+  }
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.next {
+  margin: 0;
+}
+
+/* -------------------------------------------------------- hint / colophon */
+
+.hint,
+.colophon {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.85rem;
+}
+
+.hint {
+  margin: 0;
+}
+
+.colophon {
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.colophon p {
+  margin: 0;
+}
+
+.colophon a {
+  color: var(--text-muted);
+}
+
+.stack {
+  margin: 0 0 1.5rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: left;
+  overflow-x: auto;
+}
+
+/* ------------------------------------------------------------------ small */
+
+@media (max-width: 32rem) {
+  .choices {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreboard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .scoreboard__stats {
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
