@@ -426,6 +426,45 @@ a {
   color: var(--text-muted);
 }
 
+.support {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin: 0 0 1rem;
+}
+
+/*
+ * Buy Me a Coffee's brand yellow, hardcoded rather than themed: it is the same
+ * button on every one of these apps, and black-on-#FFDD00 clears AA in both
+ * themes anyway. Outspecifies `.colophon a`, which would otherwise mute it.
+ *
+ * Deliberately a plain link, not BMC's `button.prod.min.js` embed — that script
+ * would need a CSP hole for a third-party script and image just to draw one
+ * anchor, and it points at the same URL either way.
+ */
+.colophon .coffee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius);
+  background: #ffdd00;
+  color: #000;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform 0.12s ease;
+}
+
+.colophon .coffee:hover {
+  transform: translateY(-1px);
+}
+
+.colophon .coffee:active {
+  transform: translateY(0);
+}
+
 .stack {
   margin: 0 0 1.5rem;
   padding: 1rem;
