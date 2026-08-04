@@ -6,18 +6,31 @@ Game pulls top 100 monthly posts from r/TheOnion and r/NotTheOnion (stores 200 t
 
 ## Prerequisites
 
-* Node.js - http://nodejs.org
+* Node.js 18 or newer - http://nodejs.org
 
 ## Getting Started
 
 * Clone the repo
 * Install dependencies with `npm install`
-* Run development server with `npm start` and go to: http://localhost:3000/
+* Run development server with `NODE_ENV=development npm start` and go to: http://localhost:3000/
+
+## Configuration
+
+All settings are optional, but production deployments should set them.
+
+| Variable | Default | Notes |
+| --- | --- | --- |
+| `PORT` | `3000` | Port to listen on. |
+| `NODE_ENV` | *(unset)* | Set to `development` for local work. Anything else is treated as production: error responses omit stack traces and the session cookie is marked `Secure`. |
+| `SESSION_SECRET` | random per process | Set to a long random string in production so sessions survive restarts. Never commit a value. |
+| `TRUST_PROXY` | *(unset)* | Set to `1` when running behind a TLS-terminating load balancer (e.g. Elastic Beanstalk) so `Secure` cookies and client IPs work. Leave unset otherwise — trusting `X-Forwarded-*` without a proxy in front lets clients spoof their address. |
 
 ## Deployment
 
 Production version deployed to http://redditonions.zavprnpybd.us-east-1.elasticbeanstalk.com/
 *Some elastic beanstalk specific items may remain in this repo*
+
+Run `npm audit` before deploying; the dependency tree is expected to be clean.
 
 ## Built With
 
