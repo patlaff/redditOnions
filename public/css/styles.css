@@ -64,3 +64,12 @@ body { padding-top: 70px; }
 {
 	.navbar-fixed-top .navbar-brand { padding: 0px 0px 0 0; }
 }
+
+
+/**
+ * Headline copy. Kept here rather than in a style="" attribute so the Content
+ * Security Policy can forbid inline styles outright.
+*/
+
+.headline { text-align: center; }
+.navbar-brand-logo { max-height: 50px; }

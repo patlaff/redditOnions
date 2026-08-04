@@ -17,19 +17,13 @@
 
 		<!-- Override CSS file - add your own CSS rules -->
 		<link rel="stylesheet" href="/css/styles.css">
-
-		<!-- Conditional comment containing JS files for IE6 - 8 -->
-		<!--[if lt IE 9]>
-			<script src="assets/js/html5.js"></script>
-			<script src="assets/js/respond.min.js"></script>
-		<![endif]-->
 	</head>
 	<body>
 
 		<!-- Navigation -->
 	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
 			<div class="container-fluid">
-				<img src="/img/onion.png" class="navbar-brand" max-height="50px">
+				<img src="/img/onion.png" class="navbar-brand navbar-brand-logo" alt="Reddit Onions">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -54,15 +48,23 @@
 					<h1 class="text-center"><strong><%= result %></strong></h1>
 					<p>&nbsp;</p>
 
-					<p class="lead" style="text-align:center""><%= headline %></p>
+					<p class="lead headline"><%= headline %></p>
 					<hr>
 
 					<table cellspacing="90px" align="center">
 						<tbody>
 							<tr>
-								<td> <a class="btn btn-default" href= "<%= articleLink %>" target=”_blank” role="button">View Article</a> </td>
+								<td>
+									<% if (articleLink) { %>
+										<a class="btn btn-default" href="<%= articleLink %>" target="_blank" rel="noopener noreferrer external" role="button">View Article</a>
+									<% } %>
+								</td>
 								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-								<td> <a class="btn btn-default" href= "<%= redditLink %>" target=”_blank” role="button">View Reddit Comments</a> </td>
+								<td>
+									<% if (redditLink) { %>
+										<a class="btn btn-default" href="<%= redditLink %>" target="_blank" rel="noopener noreferrer external" role="button">View Reddit Comments</a>
+									<% } %>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -83,7 +85,7 @@
 			</div>
 		</div>
 		<!-- JQuery scripts -->
-	    <script src="/js/jquery-1.11.2.min.js"></script>
+	    <script src="/js/jquery-3.7.1.min.js"></script>
 
 		<!-- Bootstrap Core scripts -->
 		<script src="/js/bootstrap.min.js"></script>

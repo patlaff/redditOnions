@@ -2,18 +2,20 @@
   "name": "redditonions-aws",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "ejs": "~2.5.7",
-    "express": "~4.16.0",
-    "express-session": "^1.15.6",
-    "http-errors": "~1.6.2",
-    "morgan": ">=1.9.1",
-    "request": "^2.87.0"
+    "cookie-parser": "^1.4.7",
+    "debug": "^4.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.22.2",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "http-errors": "^2.0.1",
+    "morgan": "^1.11.0"
   }
 }
