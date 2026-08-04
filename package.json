@@ -15,6 +15,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "NODE_ENV=development node --watch server.js",
+    "refresh-headlines": "node scripts/refresh-headlines.js",
     "test": "node --test",
     "test:watch": "node --test --watch",
     "lint": "eslint ."

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createApp } from './app.js';
+import { loadCorpus } from './lib/corpus.js';
 import { createHeadlineStore } from './lib/headlines.js';
 import { createRedditClient } from './lib/reddit.js';
 
@@ -9,18 +10,45 @@ if (!Number.isInteger(port) || port < 0 || port > 65535) {
   process.exit(1);
 }
 
-const client = createRedditClient();
-if (!client.authenticated) {
-  console.warn(
-    'REDDIT_CLIENT_ID is not set; falling back to anonymous Reddit requests, ' +
-      'which are heavily rate limited and often blocked from servers. See the README.',
+/**
+ * Live Reddit fetching is opt-in, because in the default deployment it cannot
+ * work: Reddit requires per-app approval for API credentials and blocks AWS IP
+ * ranges outright, which rules out both the authenticated and the anonymous
+ * endpoints from Elastic Beanstalk. Unset, the app just serves the corpus.
+ */
+function createLiveClient() {
+  if (process.env.REDDIT_CLIENT_ID) {
+    console.log('REDDIT_CLIENT_ID is set; refreshing headlines from Reddit over OAuth.');
+    return createRedditClient();
+  }
+  if (process.env.REDDIT_ANONYMOUS === '1') {
+    console.warn(
+      'REDDIT_ANONYMOUS=1; using unauthenticated Reddit requests. These are rate ' +
+        'limited and blocked from most hosting providers — intended for local use.',
+    );
+    return createRedditClient();
+  }
+  return null;
+}
+
+const corpus = await loadCorpus();
+console.log(
+  `Loaded ${corpus.headlines.length} headlines from the corpus` +
+    `${corpus.generatedAt ? ` (generated ${corpus.generatedAt})` : ''}.`,
+);
+
+const client = createLiveClient();
+const store = createHeadlineStore({ corpus: corpus.headlines, client });
+
+if (store.size === 0 && !client) {
+  console.error(
+    'The headline corpus is empty and live fetching is off, so there is nothing to ' +
+      'play. Run `npm run refresh-headlines` and commit data/headlines.json.',
   );
 }
 
-const store = createHeadlineStore({ client });
-
-// Kick off the first load without blocking startup, so the process starts
-// answering health checks (and serving the "still loading" page) right away.
+// Kick off the first refresh without blocking startup: the corpus already makes
+// the app playable, so a slow or failing fetch costs freshness, not uptime.
 store.load().catch((err) => console.error('Initial headline load failed:', err));
 store.start();
 

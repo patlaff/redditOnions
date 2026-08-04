@@ -19,8 +19,12 @@ export function createRouter({ store }) {
     if (!headline) {
       // `expose` because this one is an operational state worth telling the
       // player about, not an internal failure to hide behind a generic message.
+      // With a corpus committed this should be unreachable — an empty pool means
+      // the corpus failed to load, which the startup logs will show.
       return next(
-        createError(503, 'Headlines are still loading. Try again in a moment.', { expose: true }),
+        createError(503, 'No headlines are available right now. Try again in a moment.', {
+          expose: true,
+        }),
       );
     }
     res.render('guess', {
@@ -69,10 +73,13 @@ export function createRouter({ store }) {
 
   /** Liveness probe for the load balancer, and a quick way to see refresh health. */
   router.get('/healthz', (req, res) => {
-    const { size, lastLoadedAt, lastError } = store.status;
+    const { size, source, lastLoadedAt, lastError } = store.status;
     res.status(size > 0 ? 200 : 503).json({
-      status: size > 0 ? 'ok' : 'loading',
+      status: size > 0 ? 'ok' : 'empty',
       headlines: size,
+      // 'corpus' means live refreshes are off or have not succeeded yet — the
+      // app is healthy either way, just serving committed headlines.
+      source,
       lastLoadedAt,
       lastError,
     });

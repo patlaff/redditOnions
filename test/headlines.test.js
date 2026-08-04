@@ -9,6 +9,11 @@ function post(id, subreddit) {
   return { id, title: `Headline ${id}`, subreddit, articleUrl: null, redditUrl: null };
 }
 
+/** A corpus entry, which unlike a fetched post already carries its isFake tag. */
+function stored(id, isFake = false) {
+  return { ...post(id, isFake ? 'TheOnion' : 'nottheonion'), isFake };
+}
+
 /** A client whose responses are keyed by subreddit; an Error value is thrown. */
 function stubClient(bySubreddit) {
   return {
@@ -95,7 +100,71 @@ describe('createHeadlineStore', () => {
 
     assert.equal(store.random(), null);
     assert.equal(store.size, 0);
+    assert.equal(store.status.source, 'empty');
     assert.equal(store.status.lastLoadedAt, null);
+  });
+
+  it('is playable from the corpus before any load runs', () => {
+    const store = createHeadlineStore({
+      corpus: [stored('c1'), stored('c2', true)],
+      client: stubClient({}),
+      logger: quietLogger,
+    });
+
+    assert.equal(store.size, 2);
+    assert.equal(store.source, 'corpus');
+    assert.equal(store.get('c2').isFake, true);
+    assert.ok(store.random());
+  });
+
+  it('replaces the corpus once a live fetch succeeds', async () => {
+    const store = createHeadlineStore({
+      corpus: [stored('c1')],
+      client: stubClient({ nottheonion: [post('live', 'nottheonion')] }),
+      logger: quietLogger,
+    });
+
+    await store.load();
+
+    assert.equal(store.source, 'live');
+    assert.equal(store.get('live').isFake, false);
+    assert.equal(store.get('c1'), null, 'the stale corpus entry is gone');
+  });
+
+  it('falls back to the corpus when every live fetch fails', async () => {
+    const store = createHeadlineStore({
+      corpus: [stored('c1')],
+      client: stubClient({
+        nottheonion: new Error('HTTP 403'),
+        TheOnion: new Error('HTTP 403'),
+      }),
+      logger: quietLogger,
+    });
+
+    await store.load();
+
+    assert.equal(store.size, 1);
+    assert.equal(store.source, 'corpus');
+    assert.equal(store.get('c1').id, 'c1');
+    assert.match(store.status.lastError, /403/);
+  });
+
+  it('never touches the network without a client', async () => {
+    const store = createHeadlineStore({
+      corpus: [stored('c1')],
+      logger: quietLogger,
+      refreshIntervalMs: 5,
+    });
+
+    assert.equal(await store.load(), 1);
+    // start() must be a no-op too, or a corpus-only deploy would schedule a
+    // timer that can only ever fail.
+    store.start();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    store.stop();
+
+    assert.equal(store.source, 'corpus');
+    assert.equal(store.status.lastError, null);
   });
 
   it('picks headlines with the injected random source', async () => {

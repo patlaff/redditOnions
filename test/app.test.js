@@ -22,7 +22,12 @@ function fakeStore(headlines) {
     random: () => headlines[0] ?? null,
     get: (id) => byId[id] ?? null,
     get status() {
-      return { size: headlines.length, lastLoadedAt: null, lastError: null };
+      return {
+        size: headlines.length,
+        source: headlines.length ? 'corpus' : 'empty',
+        lastLoadedAt: null,
+        lastError: null,
+      };
     },
   };
 }
@@ -162,6 +167,7 @@ describe('the app', () => {
     assert.deepEqual(JSON.parse(res.body), {
       status: 'ok',
       headlines: 2,
+      source: 'corpus',
       lastLoadedAt: null,
       lastError: null,
     });
@@ -186,9 +192,12 @@ describe('the app', () => {
     empty.server.close();
 
     assert.equal(page.status, 503);
-    assert.equal(errorHeading(page.body), 'Headlines are still loading. Try again in a moment.');
+    assert.equal(
+      errorHeading(page.body),
+      'No headlines are available right now. Try again in a moment.',
+    );
     assert.equal(health.status, 503);
-    assert.match(health.body, /"status":"loading"/);
+    assert.match(health.body, /"status":"empty"/);
   });
 
   it('hides internal failures behind a generic message', async () => {

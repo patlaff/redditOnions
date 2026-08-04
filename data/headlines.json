@@ -1,0 +1,335 @@
+{
+  "generatedAt": null,
+  "source": "hand-written seed",
+  "note": [
+    "This is a starter corpus, written by hand so the game is playable out of the box.",
+    "It was NOT scraped from Reddit — the titles were reproduced from memory, so exact",
+    "wording may differ from what was published, and no entry carries an article or",
+    "comments link because none of them were fetched from a real post.",
+    "Replace it with real data by running `npm run refresh-headlines` from a machine",
+    "Reddit will serve (not an AWS host), then committing the result. Once you do,",
+    "generatedAt is filled in and entries gain their real Reddit ids and links."
+  ],
+  "headlines": [
+    {
+      "id": "seed-real-001",
+      "title": "Scientists teach goldfish to drive a car",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-002",
+      "title": "Japanese town spends COVID relief funds on giant squid statue",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-003",
+      "title": "Norwegian town installs giant mirrors to reflect sunlight into its town square",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-004",
+      "title": "Woman sues cereal maker over lack of real fruit in Crunch Berries",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-005",
+      "title": "Man legally changes his name to Beezow Doo-Doo Zopittybop-Bop-Bop",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-006",
+      "title": "Kentucky town elects a dog as mayor for a third term",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-007",
+      "title": "Australia once declared war on emus and lost",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-008",
+      "title": "Man sets his house on fire while trying to kill a spider",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-009",
+      "title": "Bank robber caught after writing his holdup note on his own deposit slip",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-010",
+      "title": "Florida man throws alligator through a Wendy's drive-thru window",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-011",
+      "title": "Man calls police to report that his drug dealer sold him fake drugs",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-012",
+      "title": "Study finds that most published research findings are false",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-013",
+      "title": "Prisoner who escaped jail turns himself in because it was too cold outside",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-014",
+      "title": "Thief returns stolen laptop after reading the owner's thesis on it",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-015",
+      "title": "New Zealand's Bird of the Year contest won by a bat",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-016",
+      "title": "Man declared legally dead loses court bid to prove he is alive",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-017",
+      "title": "Scientists name a new species of beetle after Greta Thunberg",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-018",
+      "title": "Police ask the public to stop calling 911 about broken McDonald's ice cream machines",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-019",
+      "title": "Man gets trapped in his own chimney while trying to break into his house",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-real-020",
+      "title": "Passenger opens a plane's emergency exit because he wanted fresh air",
+      "subreddit": "nottheonion",
+      "isFake": false,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-001",
+      "title": "'No way to prevent this,' says only nation where this regularly happens",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-002",
+      "title": "Area man passionate defender of what he imagines Constitution to be",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-003",
+      "title": "Man who understands nothing about situation confident he knows how to fix it",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-004",
+      "title": "Study finds every style of parenting produces disturbed, miserable adults",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-005",
+      "title": "Nation's girlfriends unveil new economic plan: 'Let's move in together'",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-006",
+      "title": "Report: 90% of waking hours spent staring at glowing rectangles",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-007",
+      "title": "Area man constantly mentioning he doesn't own a television",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-008",
+      "title": "Drugs win drug war",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-009",
+      "title": "Bush: 'Our long national nightmare of peace and prosperity is finally over'",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-010",
+      "title": "Fun toy banned because of three",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-011",
+      "title": "God angrily clarifies 'Don't Kill' rule",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-012",
+      "title": "Black man given nation's worst job",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-013",
+      "title": "Nation shudders at large block of uninterrupted text",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-014",
+      "title": "Underfunded schools forced to cut past tense from language programs",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-015",
+      "title": "Dolphins evolve opposable thumbs; 'Oh shit,' says humanity",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-016",
+      "title": "Congress threatens to leave D.C. unless new Capitol is built",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-017",
+      "title": "Archaeological dig uncovers ancient race of skeleton people",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-018",
+      "title": "Sumerians look on in confusion as God creates world",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-019",
+      "title": "Perky 'Canada' has own government, laws",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    },
+    {
+      "id": "seed-fake-020",
+      "title": "Historians politely remind nation to check what's happened in past before making any big decisions",
+      "subreddit": "TheOnion",
+      "isFake": true,
+      "articleUrl": null,
+      "redditUrl": null
+    }
+  ]
+}
